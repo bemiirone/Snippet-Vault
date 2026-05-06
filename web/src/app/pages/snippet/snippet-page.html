@@ -1,0 +1,63 @@
+<div class="page">
+  <div class="page-header">
+    <div class="page-header-left">
+      <a routerLink="/library" class="back-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Back
+      </a>
+      <h1 class="page-title">{{ isNew() ? 'New Snippet' : 'Edit Snippet' }}</h1>
+    </div>
+    <div class="page-actions">
+      <button class="btn btn-sm" (click)="copyRaw()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copy Raw
+      </button>
+      @if (!isNew()) {
+        <button class="btn btn-danger btn-sm" (click)="delete()">Delete</button>
+      }
+      <button class="btn btn-sm" (click)="cancel()">Cancel</button>
+      <button class="btn btn-primary btn-sm" (click)="save()">Save</button>
+    </div>
+  </div>
+
+  <div class="editor-layout">
+    <div class="editor-meta">
+      <div class="form-group">
+        <label class="form-label">Title</label>
+        <input class="input" type="text" placeholder="Snippet title" [value]="title()" (input)="title.set($any($event.target).value)" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Language</label>
+        <select class="input" [value]="language()" (change)="language.set($any($event.target).value)">
+          @for (lang of languages; track lang) {
+            <option [value]="lang">{{ lang }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Tags</label>
+        <input class="input" type="text" placeholder="auth, nestjs, utils" [value]="tagsInput()" (input)="tagsInput.set($any($event.target).value)" />
+        <span class="form-hint">Comma-separated</span>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">
+          <input type="checkbox" [checked]="starred()" (change)="starred.set($any($event.target).checked)" />
+          Starred
+        </label>
+      </div>
+    </div>
+
+    <div class="editor-content">
+      <textarea
+        class="code-editor"
+        placeholder="Paste your code here..."
+        [value]="content()"
+        (input)="content.set($any($event.target).value)"
+        spellcheck="false"
+      ></textarea>
+    </div>
+  </div>
+</div>
