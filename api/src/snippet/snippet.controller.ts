@@ -17,7 +17,7 @@ import { QuerySnippetDto } from './dto/query-snippet.dto';
 
 @Controller('snippets')
 export class SnippetController {
-  constructor(private readonly snippetService: SnippetService) {}
+  constructor(private readonly snippetService: SnippetService) { }
 
   @Post()
   create(@Body() dto: CreateSnippetDto) {
@@ -34,6 +34,15 @@ export class SnippetController {
     return this.snippetService.getStats();
   }
 
+  @Get('export/json')
+  export(@Res() res: Response) {
+    return this.snippetService.exportAll().then(snippets => {
+      res.setHeader('Content-Disposition', 'attachment; filename=snippets.json');
+      res.setHeader('Content-Type', 'application/json');
+      res.json(snippets);
+    });
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.snippetService.findOne(id);
@@ -47,14 +56,5 @@ export class SnippetController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.snippetService.remove(id);
-  }
-
-  @Get('export/json')
-  export(@Res() res: Response) {
-    return this.snippetService.exportAll().then(snippets => {
-      res.setHeader('Content-Disposition', 'attachment; filename=snippets.json');
-      res.setHeader('Content-Type', 'application/json');
-      res.json(snippets);
-    });
   }
 }

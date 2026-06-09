@@ -1,6 +1,6 @@
 import { IsString, IsOptional, IsBoolean, IsArray, IsEnum } from 'class-validator';
 
-const LANGUAGES = ['ts', 'js', 'py', 'sh', 'json', 'yml', 'md', 'sql', 'html', 'css', 'other'] as const;
+const LANGUAGES = ['ts', 'js', 'py', 'sh', 'json', 'yml', 'md', 'sql', 'html', 'css', 'plain text', 'other'] as const;
 
 export class CreateSnippetDto {
   @IsString()

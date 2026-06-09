@@ -1,5 +1,7 @@
-import { Component, signal, effect, inject } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { SnippetService } from '../../services/snippet.service';
+import { CreateSnippetDto, UpdateSnippetDto } from '../../models/snippet.model';
 
 const LANGUAGES = ['ts', 'js', 'py', 'sh', 'json', 'yml', 'md', 'sql', 'html', 'css', 'other'];
 
@@ -12,6 +14,7 @@ const LANGUAGES = ['ts', 'js', 'py', 'sh', 'json', 'yml', 'md', 'sql', 'html', '
 export class SnippetPage {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly snippetService = inject(SnippetService);
 
   protected readonly languages = LANGUAGES;
   protected readonly isNew = signal(true);
@@ -20,26 +23,28 @@ export class SnippetPage {
   protected readonly tagsInput = signal('');
   protected readonly content = signal('');
   protected readonly starred = signal(false);
+  protected readonly loading = signal(false);
+  protected readonly error = signal('');
 
-  constructor() {
-    effect(() => {
-      const id = this.route.snapshot.paramMap.get('id');
-      if (id) {
-        this.isNew.set(false);
-        this.title.set('Auth Guard');
-        this.language.set('ts');
-        this.tagsInput.set('auth, nestjs');
-        this.content.set('export const authGuard = () => inject(AuthService).isAuthenticated();');
-        this.starred.set(true);
-      } else {
-        this.isNew.set(true);
-        this.title.set('');
-        this.language.set('ts');
-        this.tagsInput.set('');
-        this.content.set('');
-        this.starred.set(false);
+  async ngOnInit(): Promise<void> {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.isNew.set(false);
+      this.loading.set(true);
+      try {
+        const snippet = await this.snippetService.getById(id);
+        this.title.set(snippet.title);
+        this.language.set(snippet.language);
+        this.tagsInput.set(snippet.tags.join(', '));
+        this.content.set(snippet.content);
+        this.starred.set(snippet.starred);
+      } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : 'Failed to load snippet';
+        this.error.set(message);
+      } finally {
+        this.loading.set(false);
       }
-    });
+    }
   }
 
   protected parseTags(): string[] {
@@ -49,18 +54,56 @@ export class SnippetPage {
       .filter(Boolean);
   }
 
-  protected save(): void {
+  protected async save(): Promise<void> {
     if (!this.title() || !this.content()) {
       return;
     }
-    this.router.navigate(['/library']);
+
+    this.loading.set(true);
+    this.error.set('');
+
+    try {
+      const dto: CreateSnippetDto & UpdateSnippetDto = {
+        title: this.title(),
+        content: this.content(),
+        language: this.language(),
+        tags: this.parseTags(),
+        starred: this.starred(),
+      };
+
+      const id = this.route.snapshot.paramMap.get('id');
+      if (id) {
+        await this.snippetService.update(id, dto);
+      } else {
+        await this.snippetService.create(dto as CreateSnippetDto);
+      }
+
+      this.router.navigate(['/library']);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Failed to save snippet';
+      this.error.set(message);
+    } finally {
+      this.loading.set(false);
+    }
+  }
+
+  protected async delete(): Promise<void> {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (!id) return;
+
+    this.loading.set(true);
+    try {
+      await this.snippetService.delete(id);
+      this.router.navigate(['/library']);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Failed to delete snippet';
+      this.error.set(message);
+    } finally {
+      this.loading.set(false);
+    }
   }
 
   protected cancel(): void {
-    this.router.navigate(['/library']);
-  }
-
-  protected delete(): void {
     this.router.navigate(['/library']);
   }
 

@@ -1,15 +1,7 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, inject, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
-
-interface Snippet {
-  id: string;
-  title: string;
-  language: string;
-  tags: string[];
-  content: string;
-  starred: boolean;
-  createdAt: string;
-}
+import { SnippetService } from '../../services/snippet.service';
+import { Snippet, SnippetStats } from '../../models/snippet.model';
 
 @Component({
   selector: 'app-dashboard-page',
@@ -17,23 +9,29 @@ interface Snippet {
   templateUrl: './dashboard-page.html',
   styleUrl: './dashboard-page.scss'
 })
-export class DashboardPage {
-  protected readonly stats = signal({
-    total: 42,
-    topLanguage: 'TypeScript',
-    topTag: 'nestjs'
-  });
+export class DashboardPage implements OnInit {
+  private readonly snippetService = inject(SnippetService);
 
-  protected readonly recentSnippets = signal<Snippet[]>([
-    { id: '1', title: 'Auth Guard', language: 'ts', tags: ['auth', 'nestjs'], content: 'export const authGuard = () => inject(AuthService).isAuthenticated();', starred: true, createdAt: '2026-05-05' },
-    { id: '2', title: 'Docker Compose', language: 'yml', tags: ['devops', 'docker'], content: 'services:\n  api:\n    build: .\n    ports:\n      - "3000:3000"', starred: false, createdAt: '2026-05-04' },
-    { id: '3', title: 'Regex Email', language: 'js', tags: ['regex', 'utils'], content: 'const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;', starred: true, createdAt: '2026-05-03' },
-    { id: '4', title: 'Git Aliases', language: 'sh', tags: ['git', 'cli'], content: 'alias gs="git status"\nalias gc="git commit"', starred: false, createdAt: '2026-05-02' },
-    { id: '5', title: 'Mongoose Schema', language: 'ts', tags: ['mongoose', 'nestjs'], content: '@Schema()\nexport class User {\n  @Prop() name: string;\n}', starred: false, createdAt: '2026-05-01' },
-    { id: '6', title: 'CSS Grid Layout', language: 'css', tags: ['css', 'layout'], content: '.grid {\n  display: grid;\n  grid-template-columns: repeat(3, 1fr);\n}', starred: true, createdAt: '2026-04-30' },
-    { id: '7', title: 'Python Decorator', language: 'py', tags: ['python', 'patterns'], content: 'def timer(func):\n    def wrapper(*args):\n        return func(*args)\n    return wrapper', starred: false, createdAt: '2026-04-29' },
-    { id: '8', title: 'SQL Migration', language: 'sql', tags: ['sql', 'db'], content: 'ALTER TABLE snippets ADD COLUMN starred BOOLEAN DEFAULT false;', starred: false, createdAt: '2026-04-28' },
-  ]);
+  protected readonly loading = signal(true);
+  protected readonly error = signal('');
+  protected readonly stats = signal<SnippetStats>({ total: 0, topLanguages: [], topTags: [] });
+  protected readonly recentSnippets = signal<Snippet[]>([]);
+
+  async ngOnInit(): Promise<void> {
+    try {
+      const [stats, snippets] = await Promise.all([
+        this.snippetService.getStats(),
+        this.snippetService.getAll({ limit: 8 }),
+      ]);
+      this.stats.set(stats);
+      this.recentSnippets.set(snippets);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Failed to load data';
+      this.error.set(message);
+    } finally {
+      this.loading.set(false);
+    }
+  }
 
   protected copyToClipboard(content: string): void {
     navigator.clipboard.writeText(content);
