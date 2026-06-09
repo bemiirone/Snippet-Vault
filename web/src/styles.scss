@@ -200,6 +200,10 @@ button {
   background: transparent;
   color: var(--text-secondary);
   border-radius: var(--radius);
+
+  .pi {
+    color: inherit;
+  }
 }
 
 .btn-icon:hover {
@@ -301,4 +305,10 @@ button {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--bg-hover);
+}
+
+/* PrimeIcons */
+i.pi {
+  font-style: normal;
+  color: inherit;
 }
