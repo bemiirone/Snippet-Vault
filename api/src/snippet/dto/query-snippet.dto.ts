@@ -12,7 +12,7 @@ export class QuerySnippetDto {
 
   @IsOptional()
   @IsString()
-  language?: string;
+  programmingLanguage?: string;
 
   @IsOptional()
   @IsIn(['newest', 'oldest', 'alpha'])

@@ -34,7 +34,7 @@ export class SnippetPage {
       try {
         const snippet = await this.snippetService.getById(id);
         this.title.set(snippet.title);
-        this.language.set(snippet.language);
+        this.language.set(snippet.programmingLanguage);
         this.tagsInput.set(snippet.tags.join(', '));
         this.content.set(snippet.content);
         this.starred.set(snippet.starred);
@@ -66,7 +66,7 @@ export class SnippetPage {
       const dto: CreateSnippetDto & UpdateSnippetDto = {
         title: this.title(),
         content: this.content(),
-        language: this.language(),
+        programmingLanguage: this.language(),
         tags: this.parseTags(),
         starred: this.starred(),
       };

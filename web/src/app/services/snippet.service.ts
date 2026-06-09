@@ -11,7 +11,7 @@ export class SnippetService {
     const params: Record<string, string> = {};
     if (query.q) params['q'] = query.q;
     if (query.tags) params['tags'] = query.tags;
-    if (query.language) params['language'] = query.language;
+    if (query.programmingLanguage) params['programmingLanguage'] = query.programmingLanguage;
     if (query.sort) params['sort'] = query.sort;
     if (query.limit) params['limit'] = String(query.limit);
 

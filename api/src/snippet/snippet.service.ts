@@ -11,7 +11,7 @@ export class SnippetService {
   constructor(
     @InjectModel(Snippet.name)
     private readonly snippetModel: Model<Snippet>,
-  ) {}
+  ) { }
 
   async create(dto: CreateSnippetDto): Promise<Snippet> {
     return this.snippetModel.create(dto);
@@ -29,8 +29,8 @@ export class SnippetService {
       filter['tags'] = { $in: tags };
     }
 
-    if (query.language) {
-      filter['language'] = query.language;
+    if (query.programmingLanguage) {
+      filter['programmingLanguage'] = query.programmingLanguage;
     }
 
     const sort: Record<string, 1 | -1> = {};
@@ -78,7 +78,7 @@ export class SnippetService {
     const total = await this.snippetModel.countDocuments();
 
     const topLanguages = await this.snippetModel.aggregate([
-      { $group: { _id: '$language', count: { $sum: 1 } } },
+      { $group: { _id: '$programmingLanguage', count: { $sum: 1 } } },
       { $sort: { count: -1 } },
       { $limit: 5 },
       { $project: { language: '$_id', count: 1, _id: 0 } },

@@ -3,7 +3,7 @@ export interface Snippet {
   id: string;
   title: string;
   content: string;
-  language: string;
+  programmingLanguage: string;
   tags: string[];
   starred: boolean;
   createdAt: string;
@@ -19,7 +19,7 @@ export interface SnippetStats {
 export interface CreateSnippetDto {
   title: string;
   content: string;
-  language: string;
+  programmingLanguage: string;
   tags?: string[];
   starred?: boolean;
 }
@@ -27,7 +27,7 @@ export interface CreateSnippetDto {
 export interface UpdateSnippetDto {
   title?: string;
   content?: string;
-  language?: string;
+  programmingLanguage?: string;
   tags?: string[];
   starred?: boolean;
 }
@@ -35,7 +35,7 @@ export interface UpdateSnippetDto {
 export interface QuerySnippetDto {
   q?: string;
   tags?: string;
-  language?: string;
+  programmingLanguage?: string;
   sort?: 'newest' | 'oldest' | 'alpha';
   limit?: number;
 }

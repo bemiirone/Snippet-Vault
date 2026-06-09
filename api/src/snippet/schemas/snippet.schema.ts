@@ -13,7 +13,7 @@ export class Snippet extends Document {
     required: true,
     enum: ['ts', 'js', 'py', 'sh', 'json', 'yml', 'md', 'sql', 'html', 'css', 'other'],
   })
-  language!: string;
+  programmingLanguage!: string;
 
   @Prop({ type: [String], default: [], index: true })
   tags!: string[];
@@ -26,5 +26,5 @@ export const SnippetSchema = SchemaFactory.createForClass(Snippet);
 
 SnippetSchema.index({ title: 'text', content: 'text' });
 SnippetSchema.index({ tags: 1 });
-SnippetSchema.index({ language: 1 });
+SnippetSchema.index({ programmingLanguage: 1 });
 SnippetSchema.index({ createdAt: -1 });

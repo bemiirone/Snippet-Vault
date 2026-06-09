@@ -42,7 +42,7 @@ export class LibraryPage {
       const snippets = await this.snippetService.getAll({
         q: this.searchQuery() || undefined,
         tags: tags || undefined,
-        language: this.selectedLanguage() || undefined,
+        programmingLanguage: this.selectedLanguage() || undefined,
         sort: this.sortBy(),
         limit: 50,
       });

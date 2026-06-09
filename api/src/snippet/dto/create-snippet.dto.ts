@@ -10,7 +10,7 @@ export class CreateSnippetDto {
   content!: string;
 
   @IsEnum(LANGUAGES)
-  language!: string;
+  programmingLanguage!: string;
 
   @IsOptional()
   @IsArray()
