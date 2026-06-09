@@ -28,16 +28,7 @@
         <i class="pi pi-bars" style="font-size: 20px"></i>
       </button>
 
-      <div class="search">
-        <i class="pi pi-search search-icon" style="font-size: 16px"></i>
-        <input
-          type="text"
-          class="input search-input"
-          placeholder="Search snippets..."
-          [value]="searchQuery()"
-          (input)="onSearch($event)"
-        />
-      </div>
+      <app-search-input />
 
       <div class="topbar-actions">
         <span class="sync-status">

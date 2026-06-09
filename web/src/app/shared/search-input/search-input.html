@@ -1,0 +1,10 @@
+<div class="search">
+  <i class="pi pi-search search-icon" style="font-size: 16px"></i>
+  <input
+    type="text"
+    class="input search-input"
+    [placeholder]="placeholder()"
+    [value]="searchService.query()"
+    (input)="onInput($event)"
+  />
+</div>

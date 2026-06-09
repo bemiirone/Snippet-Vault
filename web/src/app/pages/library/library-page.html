@@ -71,13 +71,13 @@
       </div>
     </div>
 
-    @if (snippets().length === 0) {
+    @if (displaySnippets().length === 0) {
       <div class="empty-state">
         <p class="text-muted">No snippets found.</p>
       </div>
     } @else {
       <div class="snippet-container" [class.grid]="viewMode() === 'grid'">
-        @for (snippet of snippets(); track snippet._id) {
+        @for (snippet of displaySnippets(); track snippet._id) {
           <div class="snippet-card">
             <div class="snippet-header">
               <a [routerLink]="['/snippet', snippet._id]" class="snippet-title">{{

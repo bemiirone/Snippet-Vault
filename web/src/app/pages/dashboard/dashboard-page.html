@@ -36,11 +36,17 @@
       </button>
     </section>
 
-    @if (recentSnippets().length > 0) {
+    @if (displaySnippets().length > 0) {
       <section class="recent">
-        <h2 class="section-title">Recent Snippets</h2>
+        <h2 class="section-title">
+          @if (searchService.query().length >= 3) {
+            Search Results
+          } @else {
+            Recent Snippets
+          }
+        </h2>
         <div class="snippet-list">
-          @for (snippet of recentSnippets(); track snippet._id) {
+          @for (snippet of displaySnippets(); track snippet._id) {
             <div class="snippet-card">
               <div class="snippet-header">
                 <a [routerLink]="['/snippet', snippet._id]" class="snippet-title">{{
@@ -70,8 +76,12 @@
       </section>
     } @else {
       <div class="empty-state">
-        <p class="text-muted">No snippets yet. Create your first one!</p>
-        <a routerLink="/new" class="btn btn-primary mt-sm">+ New Snippet</a>
+        @if (searchService.query().length >= 3) {
+          <p class="text-muted">No snippets match your search.</p>
+        } @else {
+          <p class="text-muted">No snippets yet. Create your first one!</p>
+          <a routerLink="/new" class="btn btn-primary mt-sm">+ New Snippet</a>
+        }
       </div>
     }
   }
