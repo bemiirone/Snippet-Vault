@@ -2,7 +2,7 @@ import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { MessageService } from 'primeng/api';
+import { MessageService, ConfirmationService } from 'primeng/api';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeuix/themes/aura';
 
@@ -18,6 +18,7 @@ export const appConfig: ApplicationConfig = {
     provideAnimations(),
     providePrimeNG({ theme: { preset: Aura } }),
     MessageService,
+    ConfirmationService,
     configProvider,
   ]
 };

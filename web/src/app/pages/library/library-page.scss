@@ -88,6 +88,13 @@
 
 .pagination-wrapper {
   display: flex;
+  align-items: center;
   justify-content: center;
+  gap: var(--spacing-md);
   margin-top: var(--spacing-lg);
+}
+
+.snippet-count {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
 }

@@ -71,11 +71,14 @@
     } @else {
       <div class="snippet-container" [class.grid]="viewMode() === 'grid'">
         @for (snippet of paginatedSnippets(); track snippet._id) {
-          <app-snippet-card [snippet]="snippet" [showStarred]="true" (saved)="loadSnippets()" />
+          <app-snippet-card [snippet]="snippet" [showStarred]="true" (saved)="loadSnippets()" (deleted)="loadSnippets()" />
         }
       </div>
 
       <div class="pagination-wrapper">
+        <span class="snippet-count">
+          Showing {{ first() + 1 }}–{{ Math.min(first() + pageSize, filteredSnippets().length) }} of {{ filteredSnippets().length }}
+        </span>
         <p-paginator
           [rows]="pageSize"
           [totalRecords]="filteredSnippets().length"

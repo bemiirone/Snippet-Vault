@@ -19,6 +19,7 @@ import { LANGUAGES } from '../../constants/languages';
   styleUrl: './library-page.scss'
 })
 export class LibraryPage {
+  protected readonly Math = Math;
   private readonly snippetService = inject(SnippetService);
   protected readonly searchService = inject(SearchService);
 

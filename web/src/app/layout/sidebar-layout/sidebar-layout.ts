@@ -1,17 +1,24 @@
 import { Component, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { Toast } from 'primeng/toast';
+import { ConfirmDialog } from 'primeng/confirmdialog';
 import { SearchInput } from '../../shared/search-input/search-input';
 
 @Component({
   selector: 'app-sidebar-layout',
-  imports: [RouterLink, RouterLinkActive, RouterOutlet, SearchInput, Toast],
+  imports: [RouterLink, RouterLinkActive, RouterOutlet, SearchInput, Toast, ConfirmDialog],
   templateUrl: './sidebar-layout.html',
   styleUrl: './sidebar-layout.scss'
 })
 export class SidebarLayout {
   protected readonly sidebarOpen = signal(false);
-  protected readonly theme = signal<'dark' | 'light'>('dark');
+  protected readonly theme = signal<'dark' | 'light'>(
+    (localStorage.getItem('theme') as 'dark' | 'light') ?? 'dark'
+  );
+
+  constructor() {
+    document.documentElement.setAttribute('data-theme', this.theme());
+  }
 
   protected toggleSidebar(): void {
     this.sidebarOpen.update(v => !v);
@@ -20,5 +27,6 @@ export class SidebarLayout {
   protected toggleTheme(): void {
     this.theme.update(t => t === 'dark' ? 'light' : 'dark');
     document.documentElement.setAttribute('data-theme', this.theme());
+    localStorage.setItem('theme', this.theme());
   }
 }

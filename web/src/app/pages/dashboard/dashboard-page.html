@@ -26,11 +26,11 @@
         <i class="pi pi-plus" style="font-size: 16px"></i>
         New Snippet
       </a>
-      <button class="btn">
+      <button class="btn" (click)="importJson()">
         <i class="pi pi-download" style="font-size: 16px"></i>
         Import JSON
       </button>
-      <button class="btn">
+      <button class="btn" (click)="exportAll()">
         <i class="pi pi-upload" style="font-size: 16px"></i>
         Export All
       </button>
@@ -47,7 +47,7 @@
         </h2>
         <div class="snippet-list">
           @for (snippet of displaySnippets(); track snippet._id) {
-            <app-snippet-card [snippet]="snippet" (saved)="loadData()" />
+            <app-snippet-card [snippet]="snippet" (saved)="loadData()" (deleted)="loadData()" />
           }
         </div>
       </section>

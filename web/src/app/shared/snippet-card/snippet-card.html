@@ -50,11 +50,14 @@
         }
       </div>
       <div class="snippet-actions">
-        <button class="btn-icon" (click)="copyToClipboard(snippet().content); $event.stopPropagation()" title="Copy">
+        <button class="btn-icon" (click)="copyToClipboard(snippet().content); $event.stopPropagation()" aria-label="Copy">
           <i class="pi pi-copy" style="font-size: 14px"></i>
         </button>
-        <button class="btn-icon" (click)="startEdit(); $event.stopPropagation()" title="Edit">
+        <button class="btn-icon" (click)="startEdit(); $event.stopPropagation()" aria-label="Edit">
           <i class="pi pi-pencil" style="font-size: 14px"></i>
+        </button>
+        <button class="btn-icon" (click)="deleteSnippet(); $event.stopPropagation()" aria-label="Delete">
+          <i class="pi pi-trash" style="font-size: 14px"></i>
         </button>
       </div>
     </div>

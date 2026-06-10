@@ -25,13 +25,9 @@ export class DashboardPage implements OnInit {
   protected readonly stats = signal<SnippetStats>({ total: 0, topLanguages: [], topTags: [] });
   protected readonly allSnippets = signal<Snippet[]>([]);
 
-  protected readonly displaySnippets = computed<Snippet[]>(() => {
-    const filtered = filterSnippets(this.allSnippets(), this.searchService.query());
-    if (this.searchService.query().length < 3) {
-      return filtered.slice(0, 3);
-    }
-    return filtered;
-  });
+  protected readonly displaySnippets = computed<Snippet[]>(() =>
+    filterSnippets(this.allSnippets(), this.searchService.query())
+  );
 
   async ngOnInit(): Promise<void> {
     await this.loadData();
@@ -41,7 +37,7 @@ export class DashboardPage implements OnInit {
     try {
       const [stats, snippets] = await Promise.all([
         this.snippetService.getStats(),
-        this.snippetService.getAll({ limit: 50, sort: 'newest' }),
+        this.snippetService.getAll({ limit: 3, sort: 'newest' }),
       ]);
       this.stats.set(stats);
       this.allSnippets.set(snippets);
@@ -51,5 +47,47 @@ export class DashboardPage implements OnInit {
     } finally {
       this.loading.set(false);
     }
+  }
+
+  async exportAll(): Promise<void> {
+    try {
+      const snippets = await this.snippetService.exportAll();
+      const blob = new Blob([JSON.stringify(snippets, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `snippets-${new Date().toISOString().split('T')[0]}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (err: unknown) {
+      this.error.set(extractErrorMessage(err, 'Failed to export snippets'));
+    }
+  }
+
+  async importJson(): Promise<void> {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = async (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (!file) return;
+      try {
+        const text = await file.text();
+        const snippets = JSON.parse(text) as Array<Record<string, unknown>>;
+        for (const s of snippets) {
+          await this.snippetService.create({
+            title: String(s['title'] ?? ''),
+            content: String(s['content'] ?? ''),
+            programmingLanguage: String(s['programmingLanguage'] ?? 'other'),
+            tags: Array.isArray(s['tags']) ? s['tags'] : [],
+            starred: Boolean(s['starred']),
+          });
+        }
+        await this.loadData();
+      } catch (err: unknown) {
+        this.error.set(extractErrorMessage(err, 'Failed to import snippets'));
+      }
+    };
+    input.click();
   }
 }
