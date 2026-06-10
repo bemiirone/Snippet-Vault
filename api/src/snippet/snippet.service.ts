@@ -42,7 +42,7 @@ export class SnippetService {
       sort['createdAt'] = -1;
     }
 
-    const limit = Math.min(query.limit || 50, 50);
+    const limit = Math.min(query.limit || 50, 500);
 
     return this.snippetModel.find(filter).sort(sort).limit(limit).exec();
   }
