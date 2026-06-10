@@ -1,4 +1,4 @@
-import { Component, signal, inject, computed, effect, untracked } from '@angular/core';
+import { Component, signal, inject, computed, effect } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { SnippetStore } from '../../services/snippet.store';
 import { SearchService } from '../../services/search.service';
@@ -31,9 +31,27 @@ export class LibraryPage {
   protected readonly sortBy = signal<'newest' | 'oldest' | 'alpha'>('newest');
   protected readonly first = signal(0);
 
-  protected readonly filteredSnippets = computed<Snippet[]>(() =>
-    filterSnippets(this.store.snippets(), this.searchService.query())
-  );
+  protected readonly filteredSnippets = computed<Snippet[]>(() => {
+    let results = filterSnippets(this.store.snippets(), this.searchService.query());
+
+    const lang = this.selectedLanguage();
+    if (lang) {
+      results = results.filter(s => s.programmingLanguage === lang);
+    }
+
+    const tags = this.activeTags();
+    if (tags.length > 0) {
+      results = results.filter(s => tags.every(t => s.tags.includes(t)));
+    }
+
+    if (this.sortBy() === 'oldest') {
+      results = [...results].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+    } else if (this.sortBy() === 'alpha') {
+      results = [...results].sort((a, b) => a.title.localeCompare(b.title));
+    }
+
+    return results;
+  });
 
   protected readonly paginatedSnippets = computed<Snippet[]>(() => {
     const start = this.first();
@@ -45,10 +63,7 @@ export class LibraryPage {
       const _lang = this.selectedLanguage();
       const _tags = this.activeTags();
       const _sort = this.sortBy();
-      untracked(() => {
-        this.first.set(0);
-        this.store.refresh();
-      });
+      this.first.set(0);
     });
   }
 
