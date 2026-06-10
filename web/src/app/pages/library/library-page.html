@@ -28,26 +28,24 @@
       <div class="filter-controls">
         <select
           class="input input-sm"
-          [value]="selectedLanguage()"
           (change)="selectedLanguage.set($any($event.target).value)"
         >
-          <option value="">All Languages</option>
+          <option value="" [selected]="selectedLanguage() === ''">All Languages</option>
           @for (
             lang of ['ts', 'js', 'py', 'sh', 'json', 'yml', 'md', 'sql', 'html', 'css', 'other'];
             track lang
           ) {
-            <option [value]="lang">{{ lang }}</option>
+            <option [value]="lang" [selected]="selectedLanguage() === lang">{{ lang }}</option>
           }
         </select>
 
         <select
           class="input input-sm"
-          [value]="sortBy()"
           (change)="sortBy.set($any($event.target).value)"
         >
-          <option value="newest">Newest</option>
-          <option value="oldest">Oldest</option>
-          <option value="alpha">A-Z</option>
+          <option value="newest" [selected]="sortBy() === 'newest'">Newest</option>
+          <option value="oldest" [selected]="sortBy() === 'oldest'">Oldest</option>
+          <option value="alpha" [selected]="sortBy() === 'alpha'">A-Z</option>
         </select>
 
         <div class="view-toggle">

@@ -38,9 +38,9 @@
 
         <div class="form-group">
           <label class="form-label">Language</label>
-          <select class="input" [value]="language()" (change)="language.set($any($event.target).value)">
+          <select class="input" (change)="language.set($any($event.target).value)">
             @for (lang of languages; track lang) {
-              <option [value]="lang">{{ lang }}</option>
+              <option [value]="lang" [selected]="language() === lang">{{ lang }}</option>
             }
           </select>
         </div>

@@ -17,9 +17,9 @@
     <div class="edit-form">
       <div class="edit-field">
         <label>Language</label>
-        <select class="input" [value]="editLanguage()" (change)="editLanguage.set($any($event.target).value)">
+        <select class="input" (change)="editLanguage.set($any($event.target).value)">
           @for (lang of ['ts', 'js', 'py', 'sh', 'json', 'yml', 'md', 'sql', 'html', 'css', 'other']; track lang) {
-            <option [value]="lang">{{ lang }}</option>
+            <option [value]="lang" [selected]="editLanguage() === lang">{{ lang }}</option>
           }
         </select>
       </div>

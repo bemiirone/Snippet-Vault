@@ -93,5 +93,10 @@ export class SnippetCard {
 
   copyToClipboard(content: string): void {
     navigator.clipboard.writeText(content);
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Copied',
+      detail: 'Snippet copied to clipboard'
+    });
   }
 }
