@@ -4,10 +4,11 @@ import { SnippetService } from '../../services/snippet.service';
 import { SearchService } from '../../services/search.service';
 import { Snippet, SnippetStats } from '../../models/snippet.model';
 import { filterSnippets } from '../../utils/filter-snippets';
+import { SnippetCard } from '../../shared/snippet-card/snippet-card';
 
 @Component({
   selector: 'app-dashboard-page',
-  imports: [RouterLink],
+  imports: [RouterLink, SnippetCard],
   templateUrl: './dashboard-page.html',
   styleUrl: './dashboard-page.scss'
 })
@@ -42,9 +43,5 @@ export class DashboardPage implements OnInit {
     } finally {
       this.loading.set(false);
     }
-  }
-
-  protected copyToClipboard(content: string): void {
-    navigator.clipboard.writeText(content);
   }
 }

@@ -1,0 +1,27 @@
+<div class="snippet-card">
+  <div class="snippet-header">
+    <a [routerLink]="['/snippet', snippet()._id]" class="snippet-title">{{ snippet().title }}</a>
+    <div class="snippet-meta">
+      @if (showStarred() && snippet().starred) {
+        <span class="star" title="Starred">&#9733;</span>
+      }
+      <span class="badge">{{ snippet().programmingLanguage }}</span>
+    </div>
+  </div>
+  <pre class="snippet-preview"><code [innerHTML]="highlightedCode()"></code></pre>
+  <div class="snippet-footer">
+    <div class="snippet-tags">
+      @for (tag of snippet().tags; track tag) {
+        <span class="tag">#{{ tag }}</span>
+      }
+    </div>
+    <div class="snippet-actions">
+      <button class="btn-icon" (click)="copyToClipboard(snippet().content)" title="Copy">
+        <i class="pi pi-copy" style="font-size: 14px"></i>
+      </button>
+      <a [routerLink]="['/snippet', snippet()._id]" class="btn-icon" title="Edit">
+        <i class="pi pi-pencil" style="font-size: 14px"></i>
+      </a>
+    </div>
+  </div>
+</div>

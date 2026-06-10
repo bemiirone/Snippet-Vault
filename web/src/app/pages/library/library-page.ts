@@ -4,10 +4,11 @@ import { SnippetService } from '../../services/snippet.service';
 import { SearchService } from '../../services/search.service';
 import { Snippet } from '../../models/snippet.model';
 import { filterSnippets } from '../../utils/filter-snippets';
+import { SnippetCard } from '../../shared/snippet-card/snippet-card';
 
 @Component({
   selector: 'app-library-page',
-  imports: [RouterLink],
+  imports: [RouterLink, SnippetCard],
   templateUrl: './library-page.html',
   styleUrl: './library-page.scss'
 })
@@ -73,9 +74,5 @@ export class LibraryPage {
   protected setViewMode(mode: 'grid' | 'list'): void {
     this.viewMode.set(mode);
     localStorage.setItem('libraryView', mode);
-  }
-
-  protected copyToClipboard(content: string): void {
-    navigator.clipboard.writeText(content);
   }
 }

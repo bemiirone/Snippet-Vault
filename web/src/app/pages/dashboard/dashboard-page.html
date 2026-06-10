@@ -47,30 +47,7 @@
         </h2>
         <div class="snippet-list">
           @for (snippet of displaySnippets(); track snippet._id) {
-            <div class="snippet-card">
-              <div class="snippet-header">
-                <a [routerLink]="['/snippet', snippet._id]" class="snippet-title">{{
-                  snippet.title
-                }}</a>
-                <span class="badge">{{ snippet.programmingLanguage }}</span>
-              </div>
-              <pre class="snippet-preview"><code>{{ snippet.content }}</code></pre>
-              <div class="snippet-footer">
-                <div class="snippet-tags">
-                  @for (tag of snippet.tags; track tag) {
-                    <span class="tag">#{{ tag }}</span>
-                  }
-                </div>
-                <div class="snippet-actions">
-                  <button class="btn-icon" (click)="copyToClipboard(snippet.content)" title="Copy">
-                    <i class="pi pi-copy" style="font-size: 14px"></i>
-                  </button>
-                  <a [routerLink]="['/snippet', snippet._id]" class="btn-icon" title="Edit">
-                    <i class="pi pi-pencil" style="font-size: 14px"></i>
-                  </a>
-                </div>
-              </div>
-            </div>
+            <app-snippet-card [snippet]="snippet" />
           }
         </div>
       </section>
