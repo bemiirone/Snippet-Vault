@@ -5,11 +5,12 @@ import { SearchService } from '../../services/search.service';
 import { Snippet } from '../../models/snippet.model';
 import { filterSnippets } from '../../utils/filter-snippets';
 import { SnippetCard } from '../../shared/snippet-card/snippet-card';
+import { Paginator } from 'primeng/paginator';
 import { LANGUAGES } from '../../constants/languages';
 
 @Component({
   selector: 'app-library-page',
-  imports: [RouterLink, SnippetCard],
+  imports: [RouterLink, SnippetCard, Paginator],
   templateUrl: './library-page.html',
   styleUrl: './library-page.scss'
 })
@@ -18,27 +19,37 @@ export class LibraryPage {
   protected readonly searchService = inject(SearchService);
 
   protected readonly languages = LANGUAGES;
+  protected readonly pageSize = 5;
 
   protected readonly viewMode = signal<'grid' | 'list'>(localStorage.getItem('libraryView') === 'grid' ? 'grid' : 'list');
   protected readonly selectedLanguage = signal<string>('');
   protected readonly activeTags = signal<string[]>([]);
   protected readonly sortBy = signal<'newest' | 'oldest' | 'alpha'>('newest');
+  protected readonly first = signal(0);
 
   protected readonly loading = signal(true);
   protected readonly error = signal('');
   protected readonly allSnippets = signal<Snippet[]>([]);
   protected readonly allTags = signal<string[]>([]);
 
-  protected readonly displaySnippets = computed<Snippet[]>(() =>
+  protected readonly filteredSnippets = computed<Snippet[]>(() =>
     filterSnippets(this.allSnippets(), this.searchService.query())
   );
+
+  protected readonly paginatedSnippets = computed<Snippet[]>(() => {
+    const start = this.first();
+    return this.filteredSnippets().slice(start, start + this.pageSize);
+  });
 
   constructor() {
     effect(() => {
       const _lang = this.selectedLanguage();
       const _tags = this.activeTags();
       const _sort = this.sortBy();
-      untracked(() => this.loadSnippets());
+      untracked(() => {
+        this.first.set(0);
+        this.loadSnippets();
+      });
     });
   }
 
@@ -77,5 +88,11 @@ export class LibraryPage {
   protected setViewMode(mode: 'grid' | 'list'): void {
     this.viewMode.set(mode);
     localStorage.setItem('libraryView', mode);
+  }
+
+  protected onPageChange(event: { first?: number }): void {
+    if (event.first !== undefined) {
+      this.first.set(event.first);
+    }
   }
 }

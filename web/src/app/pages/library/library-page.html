@@ -66,15 +66,24 @@
       </div>
     </div>
 
-    @if (displaySnippets().length === 0) {
+    @if (filteredSnippets().length === 0) {
       <div class="empty-state">
         <p class="text-muted">No snippets found.</p>
       </div>
     } @else {
       <div class="snippet-container" [class.grid]="viewMode() === 'grid'">
-        @for (snippet of displaySnippets(); track snippet._id) {
+        @for (snippet of paginatedSnippets(); track snippet._id) {
           <app-snippet-card [snippet]="snippet" [showStarred]="true" (saved)="loadSnippets()" />
         }
+      </div>
+
+      <div class="pagination-wrapper">
+        <p-paginator
+          [rows]="pageSize"
+          [totalRecords]="filteredSnippets().length"
+          [first]="first()"
+          (onPageChange)="onPageChange($event)"
+        />
       </div>
     }
   }

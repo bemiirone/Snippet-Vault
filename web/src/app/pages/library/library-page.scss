@@ -92,6 +92,12 @@
   gap: var(--spacing-md);
 }
 
+.pagination-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--spacing-lg);
+}
+
 .empty-state {
   display: flex;
   justify-content: center;
