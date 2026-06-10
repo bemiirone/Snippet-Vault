@@ -2,8 +2,7 @@ import { Component, signal, inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { SnippetService } from '../../services/snippet.service';
 import { CreateSnippetDto, UpdateSnippetDto } from '../../models/snippet.model';
-
-const LANGUAGES = ['ts', 'js', 'py', 'sh', 'json', 'yml', 'md', 'sql', 'html', 'css', 'other'];
+import { LANGUAGES } from '../../constants/languages';
 
 @Component({
   selector: 'app-snippet-page',

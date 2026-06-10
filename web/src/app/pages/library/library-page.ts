@@ -5,6 +5,7 @@ import { SearchService } from '../../services/search.service';
 import { Snippet } from '../../models/snippet.model';
 import { filterSnippets } from '../../utils/filter-snippets';
 import { SnippetCard } from '../../shared/snippet-card/snippet-card';
+import { LANGUAGES } from '../../constants/languages';
 
 @Component({
   selector: 'app-library-page',
@@ -15,6 +16,8 @@ import { SnippetCard } from '../../shared/snippet-card/snippet-card';
 export class LibraryPage {
   private readonly snippetService = inject(SnippetService);
   protected readonly searchService = inject(SearchService);
+
+  protected readonly languages = LANGUAGES;
 
   protected readonly viewMode = signal<'grid' | 'list'>(localStorage.getItem('libraryView') === 'grid' ? 'grid' : 'list');
   protected readonly selectedLanguage = signal<string>('');

@@ -31,10 +31,7 @@
           (change)="selectedLanguage.set($any($event.target).value)"
         >
           <option value="" [selected]="selectedLanguage() === ''">All Languages</option>
-          @for (
-            lang of ['ts', 'js', 'py', 'sh', 'json', 'yml', 'md', 'sql', 'html', 'css', 'other'];
-            track lang
-          ) {
+          @for (lang of languages; track lang) {
             <option [value]="lang" [selected]="selectedLanguage() === lang">{{ lang }}</option>
           }
         </select>

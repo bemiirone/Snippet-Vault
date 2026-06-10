@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { Snippet, UpdateSnippetDto } from '../../models/snippet.model';
 import { SnippetService } from '../../services/snippet.service';
 import { MessageService } from 'primeng/api';
+import { LANGUAGES } from '../../constants/languages';
 import hljs from 'highlight.js/lib/common';
 
 hljs.registerAliases('ts', { languageName: 'typescript' });
@@ -23,6 +24,8 @@ export class SnippetCard {
 
   readonly snippet = input.required<Snippet>();
   readonly showStarred = input(false);
+
+  protected readonly languages = LANGUAGES;
 
   protected readonly expanded = signal(false);
   protected readonly editing = signal(false);

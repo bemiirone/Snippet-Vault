@@ -18,7 +18,7 @@
       <div class="edit-field">
         <label>Language</label>
         <select class="input" (change)="editLanguage.set($any($event.target).value)">
-          @for (lang of ['ts', 'js', 'py', 'sh', 'json', 'yml', 'md', 'sql', 'html', 'css', 'other']; track lang) {
+          @for (lang of languages; track lang) {
             <option [value]="lang" [selected]="editLanguage() === lang">{{ lang }}</option>
           }
         </select>
