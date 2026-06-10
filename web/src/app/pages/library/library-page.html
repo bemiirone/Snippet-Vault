@@ -78,7 +78,7 @@
     } @else {
       <div class="snippet-container" [class.grid]="viewMode() === 'grid'">
         @for (snippet of displaySnippets(); track snippet._id) {
-          <app-snippet-card [snippet]="snippet" [showStarred]="true" />
+          <app-snippet-card [snippet]="snippet" [showStarred]="true" (saved)="loadSnippets()" />
         }
       </div>
     }

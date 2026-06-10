@@ -30,6 +30,10 @@ export class DashboardPage implements OnInit {
   });
 
   async ngOnInit(): Promise<void> {
+    await this.loadData();
+  }
+
+  async loadData(): Promise<void> {
     try {
       const [stats, snippets] = await Promise.all([
         this.snippetService.getStats(),

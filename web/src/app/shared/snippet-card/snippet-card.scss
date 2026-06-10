@@ -50,6 +50,12 @@
   overflow: hidden;
   max-height: 4.5em;
   color: var(--text-secondary);
+  cursor: pointer;
+  transition: max-height 250ms ease;
+}
+
+.snippet-preview.expanded {
+  max-height: none;
 }
 
 .snippet-footer {
@@ -72,4 +78,48 @@
 .snippet-actions {
   display: flex;
   gap: 2px;
+}
+
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.edit-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+}
+
+.edit-title {
+  font-weight: 600;
+}
+
+.edit-content {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  resize: vertical;
+  min-height: 150px;
+}
+
+.edit-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-xs);
+}
+
+.error-banner {
+  padding: var(--spacing-sm);
+  background: rgba(248, 81, 73, 0.1);
+  border: 1px solid var(--danger);
+  border-radius: var(--radius);
+  color: var(--danger);
+  font-size: 0.8125rem;
 }

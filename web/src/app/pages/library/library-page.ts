@@ -39,7 +39,7 @@ export class LibraryPage {
     });
   }
 
-  private async loadSnippets(): Promise<void> {
+  protected async loadSnippets(): Promise<void> {
     this.loading.set(true);
     this.error.set('');
 

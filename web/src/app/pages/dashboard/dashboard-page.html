@@ -47,7 +47,7 @@
         </h2>
         <div class="snippet-list">
           @for (snippet of displaySnippets(); track snippet._id) {
-            <app-snippet-card [snippet]="snippet" />
+            <app-snippet-card [snippet]="snippet" (saved)="loadData()" />
           }
         </div>
       </section>

@@ -1,6 +1,10 @@
 <div class="snippet-card">
   <div class="snippet-header">
-    <a [routerLink]="['/snippet', snippet()._id]" class="snippet-title">{{ snippet().title }}</a>
+    @if (editing()) {
+      <input class="input edit-title" [value]="editTitle()" (input)="editTitle.set($any($event.target).value)" />
+    } @else {
+      <a [routerLink]="['/snippet', snippet()._id]" class="snippet-title" (click)="$event.stopPropagation()">{{ snippet().title }}</a>
+    }
     <div class="snippet-meta">
       @if (showStarred() && snippet().starred) {
         <span class="star" title="Starred">&#9733;</span>
@@ -8,20 +12,51 @@
       <span class="badge">{{ snippet().programmingLanguage }}</span>
     </div>
   </div>
-  <pre class="snippet-preview"><code [innerHTML]="highlightedCode()"></code></pre>
-  <div class="snippet-footer">
-    <div class="snippet-tags">
-      @for (tag of snippet().tags; track tag) {
-        <span class="tag">#{{ tag }}</span>
+
+  @if (editing()) {
+    <div class="edit-form">
+      <div class="edit-field">
+        <label>Language</label>
+        <select class="input" [value]="editLanguage()" (change)="editLanguage.set($any($event.target).value)">
+          @for (lang of ['ts', 'js', 'py', 'sh', 'json', 'yml', 'md', 'sql', 'html', 'css', 'other']; track lang) {
+            <option [value]="lang">{{ lang }}</option>
+          }
+        </select>
+      </div>
+      <div class="edit-field">
+        <label>Tags</label>
+        <input class="input" [value]="editTags()" (input)="editTags.set($any($event.target).value)" placeholder="comma, separated, tags" />
+      </div>
+      <div class="edit-field">
+        <label>Content</label>
+        <textarea class="input edit-content" [value]="editContent()" (input)="editContent.set($any($event.target).value)" rows="10"></textarea>
+      </div>
+      @if (error()) {
+        <div class="error-banner">{{ error() }}</div>
       }
+      <div class="edit-actions">
+        <button class="btn btn-primary" (click)="saveEdit()" [disabled]="saving()">
+          @if (saving()) { Saving... } @else { Save }
+        </button>
+        <button class="btn" (click)="cancelEdit()">Cancel</button>
+      </div>
     </div>
-    <div class="snippet-actions">
-      <button class="btn-icon" (click)="copyToClipboard(snippet().content)" title="Copy">
-        <i class="pi pi-copy" style="font-size: 14px"></i>
-      </button>
-      <a [routerLink]="['/snippet', snippet()._id]" class="btn-icon" title="Edit">
-        <i class="pi pi-pencil" style="font-size: 14px"></i>
-      </a>
+  } @else {
+    <pre class="snippet-preview" [class.expanded]="expanded()" (click)="toggleExpand()"><code [innerHTML]="highlightedCode()"></code></pre>
+    <div class="snippet-footer">
+      <div class="snippet-tags">
+        @for (tag of snippet().tags; track tag) {
+          <span class="tag">#{{ tag }}</span>
+        }
+      </div>
+      <div class="snippet-actions">
+        <button class="btn-icon" (click)="copyToClipboard(snippet().content); $event.stopPropagation()" title="Copy">
+          <i class="pi pi-copy" style="font-size: 14px"></i>
+        </button>
+        <button class="btn-icon" (click)="startEdit(); $event.stopPropagation()" title="Edit">
+          <i class="pi pi-pencil" style="font-size: 14px"></i>
+        </button>
+      </div>
     </div>
-  </div>
+  }
 </div>
