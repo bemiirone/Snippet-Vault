@@ -8,9 +8,9 @@
   </div>
 
   @if (loading()) {
-    <div class="loading">Loading...</div>
+    <app-loading-state />
   } @else if (error()) {
-    <div class="error-banner">{{ error() }}</div>
+    <app-error-banner [message]="error()" />
   } @else {
     <div class="filter-bar">
       <div class="filter-tags">
@@ -67,9 +67,7 @@
     </div>
 
     @if (filteredSnippets().length === 0) {
-      <div class="empty-state">
-        <p class="text-muted">No snippets found.</p>
-      </div>
+      <app-empty-state message="No snippets found." />
     } @else {
       <div class="snippet-container" [class.grid]="viewMode() === 'grid'">
         @for (snippet of paginatedSnippets(); track snippet._id) {

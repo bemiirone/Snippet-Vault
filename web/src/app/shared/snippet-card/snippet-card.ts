@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { Snippet, UpdateSnippetDto } from '../../models/snippet.model';
 import { SnippetService } from '../../services/snippet.service';
 import { MessageService } from 'primeng/api';
+import { parseTags, extractErrorMessage } from '../../utils/helpers';
 import { LANGUAGES } from '../../constants/languages';
 import hljs from 'highlight.js/lib/common';
 
@@ -71,10 +72,7 @@ export class SnippetCard {
     this.error.set('');
 
     try {
-      const tags = this.editTags()
-        .split(',')
-        .map(t => t.trim().toLowerCase())
-        .filter(Boolean);
+      const tags = parseTags(this.editTags());
 
       const dto: UpdateSnippetDto = {
         title: this.editTitle(),
@@ -87,7 +85,7 @@ export class SnippetCard {
       this.saved.emit();
       this.editing.set(false);
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Failed to save';
+      const message = extractErrorMessage(err, 'Failed to save');
       this.error.set(message);
     } finally {
       this.saving.set(false);

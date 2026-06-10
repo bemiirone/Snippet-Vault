@@ -4,11 +4,15 @@ import { SnippetService } from '../../services/snippet.service';
 import { SearchService } from '../../services/search.service';
 import { Snippet, SnippetStats } from '../../models/snippet.model';
 import { filterSnippets } from '../../utils/filter-snippets';
+import { extractErrorMessage } from '../../utils/helpers';
 import { SnippetCard } from '../../shared/snippet-card/snippet-card';
+import { LoadingState } from '../../shared/loading-state/loading-state';
+import { ErrorBanner } from '../../shared/error-banner/error-banner';
+import { EmptyState } from '../../shared/empty-state/empty-state';
 
 @Component({
   selector: 'app-dashboard-page',
-  imports: [RouterLink, SnippetCard],
+  imports: [RouterLink, SnippetCard, LoadingState, ErrorBanner, EmptyState],
   templateUrl: './dashboard-page.html',
   styleUrl: './dashboard-page.scss'
 })
@@ -42,7 +46,7 @@ export class DashboardPage implements OnInit {
       this.stats.set(stats);
       this.allSnippets.set(snippets);
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Failed to load data';
+      const message = extractErrorMessage(err, 'Failed to load data');
       this.error.set(message);
     } finally {
       this.loading.set(false);

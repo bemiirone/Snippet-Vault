@@ -1,0 +1,6 @@
+<div class="empty-state">
+  <p class="text-muted">{{ message() }}</p>
+  @if (actionLabel() && actionLink()) {
+    <a [routerLink]="actionLink()" class="btn btn-primary mt-sm">{{ actionLabel() }}</a>
+  }
+</div>

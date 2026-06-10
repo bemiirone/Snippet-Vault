@@ -74,12 +74,6 @@
   color: var(--accent);
 }
 
-.empty-state {
-  display: flex;
-  justify-content: center;
-  padding: var(--spacing-xl);
-}
-
 .snippet-container {
   display: flex;
   flex-direction: column;
@@ -96,20 +90,4 @@
   display: flex;
   justify-content: center;
   margin-top: var(--spacing-lg);
-}
-
-.empty-state {
-  display: flex;
-  justify-content: center;
-  padding: var(--spacing-xl);
-  color: var(--text-muted);
-}
-
-.error-banner {
-  padding: var(--spacing-md);
-  background: rgba(248, 81, 73, 0.1);
-  border: 1px solid var(--danger);
-  border-radius: var(--radius);
-  color: var(--danger);
-  font-size: 0.875rem;
 }

@@ -4,13 +4,17 @@ import { SnippetService } from '../../services/snippet.service';
 import { SearchService } from '../../services/search.service';
 import { Snippet } from '../../models/snippet.model';
 import { filterSnippets } from '../../utils/filter-snippets';
+import { extractErrorMessage } from '../../utils/helpers';
 import { SnippetCard } from '../../shared/snippet-card/snippet-card';
 import { Paginator } from 'primeng/paginator';
+import { LoadingState } from '../../shared/loading-state/loading-state';
+import { ErrorBanner } from '../../shared/error-banner/error-banner';
+import { EmptyState } from '../../shared/empty-state/empty-state';
 import { LANGUAGES } from '../../constants/languages';
 
 @Component({
   selector: 'app-library-page',
-  imports: [RouterLink, SnippetCard, Paginator],
+  imports: [RouterLink, SnippetCard, Paginator, LoadingState, ErrorBanner, EmptyState],
   templateUrl: './library-page.html',
   styleUrl: './library-page.scss'
 })
@@ -72,7 +76,7 @@ export class LibraryPage {
       snippets.forEach(s => s.tags.forEach(t => tagSet.add(t)));
       this.allTags.set([...tagSet].sort());
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Failed to load snippets';
+      const message = extractErrorMessage(err, 'Failed to load snippets');
       this.error.set(message);
     } finally {
       this.loading.set(false);

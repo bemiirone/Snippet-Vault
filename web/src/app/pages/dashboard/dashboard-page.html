@@ -2,9 +2,9 @@
   <h1 class="page-title">Dashboard</h1>
 
   @if (loading()) {
-    <div class="loading">Loading...</div>
+    <app-loading-state />
   } @else if (error()) {
-    <div class="error-banner">{{ error() }}</div>
+    <app-error-banner [message]="error()" />
   } @else {
     <section class="stats-row">
       <div class="stat">
@@ -52,14 +52,11 @@
         </div>
       </section>
     } @else {
-      <div class="empty-state">
-        @if (searchService.query().length >= 3) {
-          <p class="text-muted">No snippets match your search.</p>
-        } @else {
-          <p class="text-muted">No snippets yet. Create your first one!</p>
-          <a routerLink="/new" class="btn btn-primary mt-sm">+ New Snippet</a>
-        }
-      </div>
+      @if (searchService.query().length >= 3) {
+        <app-empty-state message="No snippets match your search." />
+      } @else {
+        <app-empty-state message="No snippets yet. Create your first one!" actionLabel="+ New Snippet" actionLink="/new" />
+      }
     }
   }
 </div>

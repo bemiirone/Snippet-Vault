@@ -23,11 +23,11 @@
   </div>
 
   @if (error()) {
-    <div class="error-banner">{{ error() }}</div>
+    <app-error-banner [message]="error()" />
   }
 
   @if (loading() && isNew()) {
-    <div class="loading">Loading...</div>
+    <app-loading-state />
   } @else {
     <div class="editor-layout">
       <div class="editor-meta">

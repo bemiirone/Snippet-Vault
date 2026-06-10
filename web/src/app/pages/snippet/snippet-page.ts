@@ -3,10 +3,13 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { SnippetService } from '../../services/snippet.service';
 import { CreateSnippetDto, UpdateSnippetDto } from '../../models/snippet.model';
 import { LANGUAGES } from '../../constants/languages';
+import { parseTags, extractErrorMessage } from '../../utils/helpers';
+import { LoadingState } from '../../shared/loading-state/loading-state';
+import { ErrorBanner } from '../../shared/error-banner/error-banner';
 
 @Component({
   selector: 'app-snippet-page',
-  imports: [RouterLink],
+  imports: [RouterLink, LoadingState, ErrorBanner],
   templateUrl: './snippet-page.html',
   styleUrl: './snippet-page.scss'
 })
@@ -38,19 +41,12 @@ export class SnippetPage {
         this.content.set(snippet.content);
         this.starred.set(snippet.starred);
       } catch (err: unknown) {
-        const message = err instanceof Error ? err.message : 'Failed to load snippet';
+        const message = extractErrorMessage(err, 'Failed to load snippet');
         this.error.set(message);
       } finally {
         this.loading.set(false);
       }
     }
-  }
-
-  protected parseTags(): string[] {
-    return this.tagsInput()
-      .split(',')
-      .map(t => t.trim().toLowerCase())
-      .filter(Boolean);
   }
 
   protected async save(): Promise<void> {
@@ -66,7 +62,7 @@ export class SnippetPage {
         title: this.title(),
         content: this.content(),
         programmingLanguage: this.language(),
-        tags: this.parseTags(),
+        tags: parseTags(this.tagsInput()),
         starred: this.starred(),
       };
 
@@ -79,7 +75,7 @@ export class SnippetPage {
 
       this.router.navigate(['/library']);
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Failed to save snippet';
+      const message = extractErrorMessage(err, 'Failed to save snippet');
       this.error.set(message);
     } finally {
       this.loading.set(false);
@@ -95,7 +91,7 @@ export class SnippetPage {
       await this.snippetService.delete(id);
       this.router.navigate(['/library']);
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Failed to delete snippet';
+      const message = extractErrorMessage(err, 'Failed to delete snippet');
       this.error.set(message);
     } finally {
       this.loading.set(false);
