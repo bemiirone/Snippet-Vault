@@ -1,10 +1,9 @@
 import { Component, signal, inject, computed, effect, untracked } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { SnippetService } from '../../services/snippet.service';
+import { SnippetStore } from '../../services/snippet.store';
 import { SearchService } from '../../services/search.service';
 import { Snippet } from '../../models/snippet.model';
 import { filterSnippets } from '../../utils/filter-snippets';
-import { extractErrorMessage } from '../../utils/helpers';
 import { SnippetCard } from '../../shared/snippet-card/snippet-card';
 import { Paginator } from 'primeng/paginator';
 import { LoadingState } from '../../shared/loading-state/loading-state';
@@ -20,7 +19,7 @@ import { LANGUAGES } from '../../constants/languages';
 })
 export class LibraryPage {
   protected readonly Math = Math;
-  private readonly snippetService = inject(SnippetService);
+  protected readonly store = inject(SnippetStore);
   protected readonly searchService = inject(SearchService);
 
   protected readonly languages = LANGUAGES;
@@ -32,13 +31,8 @@ export class LibraryPage {
   protected readonly sortBy = signal<'newest' | 'oldest' | 'alpha'>('newest');
   protected readonly first = signal(0);
 
-  protected readonly loading = signal(true);
-  protected readonly error = signal('');
-  protected readonly allSnippets = signal<Snippet[]>([]);
-  protected readonly allTags = signal<string[]>([]);
-
   protected readonly filteredSnippets = computed<Snippet[]>(() =>
-    filterSnippets(this.allSnippets(), this.searchService.query())
+    filterSnippets(this.store.snippets(), this.searchService.query())
   );
 
   protected readonly paginatedSnippets = computed<Snippet[]>(() => {
@@ -53,35 +47,17 @@ export class LibraryPage {
       const _sort = this.sortBy();
       untracked(() => {
         this.first.set(0);
-        this.loadSnippets();
+        this.store.refresh();
       });
     });
   }
 
-  protected async loadSnippets(): Promise<void> {
-    this.loading.set(true);
-    this.error.set('');
+  async ngOnInit(): Promise<void> {
+    await this.store.load();
+  }
 
-    try {
-      const tags = this.activeTags().join(',');
-      const snippets = await this.snippetService.getAll({
-        tags: tags || undefined,
-        programmingLanguage: this.selectedLanguage() || undefined,
-        sort: this.sortBy(),
-        limit: 50,
-      });
-
-      this.allSnippets.set(snippets);
-
-      const tagSet = new Set<string>();
-      snippets.forEach(s => s.tags.forEach(t => tagSet.add(t)));
-      this.allTags.set([...tagSet].sort());
-    } catch (err: unknown) {
-      const message = extractErrorMessage(err, 'Failed to load snippets');
-      this.error.set(message);
-    } finally {
-      this.loading.set(false);
-    }
+  async onSavedOrDeleted(): Promise<void> {
+    await this.store.refresh();
   }
 
   protected toggleTag(tag: string): void {

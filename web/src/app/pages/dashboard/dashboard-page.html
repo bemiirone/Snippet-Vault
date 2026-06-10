@@ -1,22 +1,22 @@
 <div class="page">
   <h1 class="page-title">Dashboard</h1>
 
-  @if (loading()) {
+  @if (store.loading()) {
     <app-loading-state />
-  } @else if (error()) {
-    <app-error-banner [message]="error()" />
+  } @else if (store.error()) {
+    <app-error-banner [message]="store.error()" />
   } @else {
     <section class="stats-row">
       <div class="stat">
-        <span class="stat-value">{{ stats().total }}</span>
+        <span class="stat-value">{{ store.stats().total }}</span>
         <span class="stat-label">Total Snippets</span>
       </div>
       <div class="stat">
-        <span class="stat-value">{{ stats().topLanguages[0]?.language ?? '—' }}</span>
+        <span class="stat-value">{{ store.stats().topLanguages[0]?.language ?? '—' }}</span>
         <span class="stat-label">Top Language</span>
       </div>
       <div class="stat">
-        <span class="stat-value">#{{ stats().topTags[0]?.tag ?? '—' }}</span>
+        <span class="stat-value">#{{ store.stats().topTags[0]?.tag ?? '—' }}</span>
         <span class="stat-label">Most Used Tag</span>
       </div>
     </section>
@@ -47,7 +47,7 @@
         </h2>
         <div class="snippet-list">
           @for (snippet of displaySnippets(); track snippet._id) {
-            <app-snippet-card [snippet]="snippet" (saved)="loadData()" (deleted)="loadData()" />
+            <app-snippet-card [snippet]="snippet" (saved)="onSavedOrDeleted()" (deleted)="onSavedOrDeleted()" />
           }
         </div>
       </section>

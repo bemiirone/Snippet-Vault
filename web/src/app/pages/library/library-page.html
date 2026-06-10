@@ -7,14 +7,14 @@
     </a>
   </div>
 
-  @if (loading()) {
+  @if (store.loading()) {
     <app-loading-state />
-  } @else if (error()) {
-    <app-error-banner [message]="error()" />
+  } @else if (store.error()) {
+    <app-error-banner [message]="store.error()" />
   } @else {
     <div class="filter-bar">
       <div class="filter-tags">
-        @for (tag of allTags(); track tag) {
+        @for (tag of store.allTags(); track tag) {
           <button
             class="tag-chip"
             [class.active]="activeTags().includes(tag)"
@@ -71,7 +71,7 @@
     } @else {
       <div class="snippet-container" [class.grid]="viewMode() === 'grid'">
         @for (snippet of paginatedSnippets(); track snippet._id) {
-          <app-snippet-card [snippet]="snippet" [showStarred]="true" (saved)="loadSnippets()" (deleted)="loadSnippets()" />
+          <app-snippet-card [snippet]="snippet" [showStarred]="true" (saved)="onSavedOrDeleted()" (deleted)="onSavedOrDeleted()" />
         }
       </div>
 

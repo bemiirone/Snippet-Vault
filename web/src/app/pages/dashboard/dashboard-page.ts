@@ -1,14 +1,16 @@
 import { Component, signal, inject, computed, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { SnippetService } from '../../services/snippet.service';
+import { SnippetStore } from '../../services/snippet.store';
 import { SearchService } from '../../services/search.service';
-import { Snippet, SnippetStats } from '../../models/snippet.model';
+import { SnippetService } from '../../services/snippet.service';
+import { Snippet } from '../../models/snippet.model';
 import { filterSnippets } from '../../utils/filter-snippets';
 import { extractErrorMessage } from '../../utils/helpers';
 import { SnippetCard } from '../../shared/snippet-card/snippet-card';
 import { LoadingState } from '../../shared/loading-state/loading-state';
 import { ErrorBanner } from '../../shared/error-banner/error-banner';
 import { EmptyState } from '../../shared/empty-state/empty-state';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-dashboard-page',
@@ -17,36 +19,21 @@ import { EmptyState } from '../../shared/empty-state/empty-state';
   styleUrl: './dashboard-page.scss'
 })
 export class DashboardPage implements OnInit {
+  protected readonly store = inject(SnippetStore);
   private readonly snippetService = inject(SnippetService);
+  private readonly messageService = inject(MessageService);
   protected readonly searchService = inject(SearchService);
 
-  protected readonly loading = signal(true);
-  protected readonly error = signal('');
-  protected readonly stats = signal<SnippetStats>({ total: 0, topLanguages: [], topTags: [] });
-  protected readonly allSnippets = signal<Snippet[]>([]);
-
   protected readonly displaySnippets = computed<Snippet[]>(() =>
-    filterSnippets(this.allSnippets(), this.searchService.query())
+    filterSnippets(this.store.snippets(), this.searchService.query())
   );
 
   async ngOnInit(): Promise<void> {
-    await this.loadData();
+    await this.store.load();
   }
 
-  async loadData(): Promise<void> {
-    try {
-      const [stats, snippets] = await Promise.all([
-        this.snippetService.getStats(),
-        this.snippetService.getAll({ limit: 3, sort: 'newest' }),
-      ]);
-      this.stats.set(stats);
-      this.allSnippets.set(snippets);
-    } catch (err: unknown) {
-      const message = extractErrorMessage(err, 'Failed to load data');
-      this.error.set(message);
-    } finally {
-      this.loading.set(false);
-    }
+  async onSavedOrDeleted(): Promise<void> {
+    await this.store.refresh();
   }
 
   async exportAll(): Promise<void> {
@@ -60,7 +47,7 @@ export class DashboardPage implements OnInit {
       a.click();
       URL.revokeObjectURL(url);
     } catch (err: unknown) {
-      this.error.set(extractErrorMessage(err, 'Failed to export snippets'));
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: extractErrorMessage(err, 'Failed to export snippets') });
     }
   }
 
@@ -83,9 +70,10 @@ export class DashboardPage implements OnInit {
             starred: Boolean(s['starred']),
           });
         }
-        await this.loadData();
+        await this.store.refresh();
+        this.messageService.add({ severity: 'success', summary: 'Imported', detail: 'Snippets imported successfully' });
       } catch (err: unknown) {
-        this.error.set(extractErrorMessage(err, 'Failed to import snippets'));
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: extractErrorMessage(err, 'Failed to import snippets') });
       }
     };
     input.click();
