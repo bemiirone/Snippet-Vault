@@ -47,6 +47,7 @@ __screenshots__/
 Thumbs.db
 AGENTS.md
 spec.md
+TECHNICAL_SPECIFICATION.md
 web/.angular/cache
 web/dist
 api/dist
