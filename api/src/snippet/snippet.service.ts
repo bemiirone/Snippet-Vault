@@ -98,4 +98,9 @@ export class SnippetService {
   async exportAll(): Promise<Snippet[]> {
     return this.snippetModel.find().sort({ createdAt: -1 }).exec();
   }
+
+  async importAll(snippets: CreateSnippetDto[]): Promise<Snippet[]> {
+    const imported = await this.snippetModel.insertMany(snippets);
+    return imported.map(doc => doc.toObject());
+  }
 }

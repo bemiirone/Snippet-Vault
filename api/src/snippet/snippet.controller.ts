@@ -34,6 +34,11 @@ export class SnippetController {
     return this.snippetService.getStats();
   }
 
+  @Post('import/json')
+  import(@Body() snippets: CreateSnippetDto[]) {
+    return this.snippetService.importAll(snippets);
+  }
+
   @Get('export/json')
   export(@Res() res: Response) {
     return this.snippetService.exportAll().then(snippets => {

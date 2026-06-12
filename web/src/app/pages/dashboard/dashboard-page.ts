@@ -61,15 +61,14 @@ export class DashboardPage implements OnInit {
       try {
         const text = await file.text();
         const snippets = JSON.parse(text) as Array<Record<string, unknown>>;
-        for (const s of snippets) {
-          await this.snippetService.create({
-            title: String(s['title'] ?? ''),
-            content: String(s['content'] ?? ''),
-            programmingLanguage: String(s['programmingLanguage'] ?? 'other'),
-            tags: Array.isArray(s['tags']) ? s['tags'] : [],
-            starred: Boolean(s['starred']),
-          });
-        }
+        const dtos = snippets.map(s => ({
+          title: String(s['title'] ?? ''),
+          content: String(s['content'] ?? ''),
+          programmingLanguage: String(s['programmingLanguage'] ?? 'other'),
+          tags: Array.isArray(s['tags']) ? s['tags'] : [],
+          starred: Boolean(s['starred']),
+        }));
+        await this.snippetService.importAll(dtos);
         await this.store.refresh();
         this.messageService.add({ severity: 'success', summary: 'Imported', detail: 'Snippets imported successfully' });
       } catch (err: unknown) {

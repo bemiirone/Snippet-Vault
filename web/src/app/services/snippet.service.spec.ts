@@ -129,8 +129,21 @@ describe('SnippetService', () => {
   describe('exportAll', () => {
     it('should export all snippets', async () => {
       const promise = service.exportAll();
-      const req = httpMock.expectOne('/api/export/json');
+      const req = httpMock.expectOne('/api/snippets/export/json');
       expect(req.request.method).toBe('GET');
+      req.flush([mockSnippet]);
+      const result = await promise;
+      expect(result).toHaveLength(1);
+    });
+  });
+
+  describe('importAll', () => {
+    it('should import snippets via bulk endpoint', async () => {
+      const dtos = [{ title: 'New', content: 'code', programmingLanguage: 'ts', tags: [], starred: false }];
+      const promise = service.importAll(dtos);
+      const req = httpMock.expectOne('/api/snippets/import/json');
+      expect(req.request.method).toBe('POST');
+      expect(req.request.body).toEqual(dtos);
       req.flush([mockSnippet]);
       const result = await promise;
       expect(result).toHaveLength(1);

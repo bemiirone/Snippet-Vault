@@ -52,7 +52,13 @@ export class SnippetService {
 
   async exportAll(): Promise<Snippet[]> {
     return firstValueFrom(
-      this.http.get<Snippet[]>('/api/export/json')
+      this.http.get<Snippet[]>('/api/snippets/export/json')
+    );
+  }
+
+  async importAll(snippets: CreateSnippetDto[]): Promise<Snippet[]> {
+    return firstValueFrom(
+      this.http.post<Snippet[]>('/api/snippets/import/json', snippets)
     );
   }
 }
