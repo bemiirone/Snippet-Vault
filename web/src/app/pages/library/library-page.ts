@@ -26,27 +26,24 @@ export class LibraryPage {
   protected readonly pageSize = 5;
 
   protected readonly viewMode = signal<'grid' | 'list'>(localStorage.getItem('libraryView') === 'grid' ? 'grid' : 'list');
-  protected readonly selectedLanguage = signal<string>('');
-  protected readonly activeTags = signal<string[]>([]);
-  protected readonly sortBy = signal<'newest' | 'oldest' | 'alpha'>('newest');
   protected readonly first = signal(0);
 
   protected readonly filteredSnippets = computed<Snippet[]>(() => {
     let results = filterSnippets(this.store.snippets(), this.searchService.query());
 
-    const lang = this.selectedLanguage();
+    const lang = this.searchService.selectedLanguage();
     if (lang) {
       results = results.filter(s => s.programmingLanguage === lang);
     }
 
-    const tags = this.activeTags();
+    const tags = this.searchService.activeTags();
     if (tags.length > 0) {
       results = results.filter(s => tags.every(t => s.tags.includes(t)));
     }
 
-    if (this.sortBy() === 'oldest') {
+    if (this.searchService.sortBy() === 'oldest') {
       results = [...results].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
-    } else if (this.sortBy() === 'alpha') {
+    } else if (this.searchService.sortBy() === 'alpha') {
       results = [...results].sort((a, b) => a.title.localeCompare(b.title));
     }
 
@@ -60,9 +57,9 @@ export class LibraryPage {
 
   constructor() {
     effect(() => {
-      const _lang = this.selectedLanguage();
-      const _tags = this.activeTags();
-      const _sort = this.sortBy();
+      const _lang = this.searchService.selectedLanguage();
+      const _tags = this.searchService.activeTags();
+      const _sort = this.searchService.sortBy();
       this.first.set(0);
     });
   }
@@ -76,9 +73,7 @@ export class LibraryPage {
   }
 
   protected toggleTag(tag: string): void {
-    this.activeTags.update(tags =>
-      tags.includes(tag) ? tags.filter(t => t !== tag) : [...tags, tag]
-    );
+    this.searchService.toggleTag(tag);
   }
 
   protected setViewMode(mode: 'grid' | 'list'): void {

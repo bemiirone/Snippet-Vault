@@ -17,7 +17,7 @@
         @for (tag of store.allTags(); track tag) {
           <button
             class="tag-chip"
-            [class.active]="activeTags().includes(tag)"
+            [class.active]="searchService.activeTags().includes(tag)"
             (click)="toggleTag(tag)"
           >
             #{{ tag }}
@@ -28,21 +28,21 @@
       <div class="filter-controls">
         <select
           class="input input-sm"
-          (change)="selectedLanguage.set($any($event.target).value)"
+          (change)="searchService.setLanguage($any($event.target).value)"
         >
-          <option value="" [selected]="selectedLanguage() === ''">All Languages</option>
+          <option value="" [selected]="searchService.selectedLanguage() === ''">All Languages</option>
           @for (lang of languages; track lang) {
-            <option [value]="lang" [selected]="selectedLanguage() === lang">{{ lang }}</option>
+            <option [value]="lang" [selected]="searchService.selectedLanguage() === lang">{{ lang }}</option>
           }
         </select>
 
         <select
           class="input input-sm"
-          (change)="sortBy.set($any($event.target).value)"
+          (change)="searchService.setSortBy($any($event.target).value)"
         >
-          <option value="newest" [selected]="sortBy() === 'newest'">Newest</option>
-          <option value="oldest" [selected]="sortBy() === 'oldest'">Oldest</option>
-          <option value="alpha" [selected]="sortBy() === 'alpha'">A-Z</option>
+          <option value="newest" [selected]="searchService.sortBy() === 'newest'">Newest</option>
+          <option value="oldest" [selected]="searchService.sortBy() === 'oldest'">Oldest</option>
+          <option value="alpha" [selected]="searchService.sortBy() === 'alpha'">A-Z</option>
         </select>
 
         <div class="view-toggle">

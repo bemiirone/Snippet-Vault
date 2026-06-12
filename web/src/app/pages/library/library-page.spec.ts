@@ -7,7 +7,15 @@ import { Snippet, SnippetStats } from '../../models/snippet.model';
 
 describe('LibraryPage', () => {
   let storeMock: { load: ReturnType<typeof vi.fn>; refresh: ReturnType<typeof vi.fn>; snippets: ReturnType<typeof vi.fn>; loading: ReturnType<typeof vi.fn>; error: ReturnType<typeof vi.fn>; loaded: ReturnType<typeof vi.fn>; stats: ReturnType<typeof vi.fn> };
-  let searchServiceMock: { query: ReturnType<typeof vi.fn> };
+  let searchServiceMock: {
+    query: ReturnType<typeof vi.fn>;
+    selectedLanguage: ReturnType<typeof vi.fn>;
+    activeTags: ReturnType<typeof vi.fn>;
+    sortBy: ReturnType<typeof vi.fn>;
+    toggleTag: ReturnType<typeof vi.fn>;
+    setLanguage: ReturnType<typeof vi.fn>;
+    setSortBy: ReturnType<typeof vi.fn>;
+  };
   let storageMock: Storage;
 
   const mockSnippets: Snippet[] = [
@@ -74,7 +82,15 @@ describe('LibraryPage', () => {
       loaded: vi.fn().mockReturnValue(true),
       stats: vi.fn().mockReturnValue(mockStats),
     };
-    searchServiceMock = { query: vi.fn().mockReturnValue('') };
+    searchServiceMock = {
+      query: vi.fn().mockReturnValue(''),
+      selectedLanguage: vi.fn().mockReturnValue(''),
+      activeTags: vi.fn().mockReturnValue([]),
+      sortBy: vi.fn().mockReturnValue('newest'),
+      toggleTag: vi.fn(),
+      setLanguage: vi.fn(),
+      setSortBy: vi.fn(),
+    };
 
     TestBed.configureTestingModule({
       imports: [LibraryPage],
@@ -112,17 +128,10 @@ describe('LibraryPage', () => {
   });
 
   describe('toggleTag', () => {
-    it('should add tag when not present', () => {
+    it('should call searchService.toggleTag', () => {
       const fixture = TestBed.createComponent(LibraryPage);
       fixture.componentInstance['toggleTag']('test');
-      expect(fixture.componentInstance['activeTags']()).toContain('test');
-    });
-
-    it('should remove tag when present', () => {
-      const fixture = TestBed.createComponent(LibraryPage);
-      fixture.componentInstance['activeTags'].set(['test']);
-      fixture.componentInstance['toggleTag']('test');
-      expect(fixture.componentInstance['activeTags']()).not.toContain('test');
+      expect(searchServiceMock.toggleTag).toHaveBeenCalledWith('test');
     });
   });
 });

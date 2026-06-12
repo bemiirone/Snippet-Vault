@@ -1,8 +1,9 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { Toast } from 'primeng/toast';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { SearchInput } from '../../shared/search-input/search-input';
+import { SearchService } from '../../services/search.service';
 
 @Component({
   selector: 'app-sidebar-layout',
@@ -11,6 +12,7 @@ import { SearchInput } from '../../shared/search-input/search-input';
   styleUrl: './sidebar-layout.scss'
 })
 export class SidebarLayout {
+  protected readonly searchService = inject(SearchService);
   protected readonly sidebarOpen = signal(false);
   protected readonly theme = signal<'dark' | 'light'>(
     (localStorage.getItem('theme') as 'dark' | 'light') ?? 'dark'
@@ -28,5 +30,9 @@ export class SidebarLayout {
     this.theme.update(t => t === 'dark' ? 'light' : 'dark');
     document.documentElement.setAttribute('data-theme', this.theme());
     localStorage.setItem('theme', this.theme());
+  }
+
+  protected clearSearch(): void {
+    this.searchService.clearAll();
   }
 }
