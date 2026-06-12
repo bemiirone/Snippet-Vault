@@ -24,9 +24,11 @@ export class DashboardPage implements OnInit {
   private readonly messageService = inject(MessageService);
   protected readonly searchService = inject(SearchService);
 
-  protected readonly displaySnippets = computed<Snippet[]>(() =>
-    filterSnippets(this.store.snippets(), this.searchService.query())
-  );
+  protected readonly displaySnippets = computed<Snippet[]>(() => {
+    const filtered = filterSnippets(this.store.snippets(), this.searchService.query());
+    const isSearching = this.searchService.query().length >= 3;
+    return isSearching ? filtered : filtered.slice(0, 3);
+  });
 
   async ngOnInit(): Promise<void> {
     await this.store.load();
