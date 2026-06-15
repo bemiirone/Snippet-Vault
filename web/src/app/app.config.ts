@@ -7,7 +7,6 @@ import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeuix/themes/aura';
 
 import { routes } from './app.routes';
-import { configProvider } from './config/config.provider';
 import { apiInterceptor } from './interceptors/api.interceptor';
 
 export const appConfig: ApplicationConfig = {
@@ -19,6 +18,5 @@ export const appConfig: ApplicationConfig = {
     providePrimeNG({ theme: { preset: Aura } }),
     MessageService,
     ConfirmationService,
-    configProvider,
   ]
 };
