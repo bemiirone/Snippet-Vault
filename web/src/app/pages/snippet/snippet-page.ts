@@ -1,6 +1,7 @@
 import { Component, signal, inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { SnippetService } from '../../services/snippet.service';
+import { SnippetStore } from '../../services/snippet.store';
 import { CreateSnippetDto, UpdateSnippetDto } from '../../models/snippet.model';
 import { LANGUAGES } from '../../constants/languages';
 import { parseTags, extractErrorMessage } from '../../utils/helpers';
@@ -18,6 +19,7 @@ export class SnippetPage {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly snippetService = inject(SnippetService);
+  private readonly snippetStore = inject(SnippetStore);
   private readonly messageService = inject(MessageService);
   private readonly confirmationService = inject(ConfirmationService);
 
@@ -78,6 +80,7 @@ export class SnippetPage {
         this.messageService.add({ severity: 'success', summary: 'Created', detail: 'Snippet created successfully' });
       }
 
+      this.snippetStore.invalidate();
       this.router.navigate(['/library']);
     } catch (err: unknown) {
       const message = extractErrorMessage(err, 'Failed to save snippet');
@@ -102,7 +105,8 @@ export class SnippetPage {
         try {
           await this.snippetService.delete(id);
           this.messageService.add({ severity: 'success', summary: 'Deleted', detail: 'Snippet deleted successfully' });
-          this.router.navigate(['/library']);
+    this.snippetStore.invalidate();
+      this.router.navigate(['/library']);
         } catch (err: unknown) {
           const message = extractErrorMessage(err, 'Failed to delete snippet');
           this.error.set(message);
