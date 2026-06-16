@@ -1,24 +1,17 @@
 import { TestBed } from '@angular/core/testing';
-import { APP_INITIALIZER } from '@angular/core';
-import { configProvider, initConfig } from './config.provider';
+import { configResolver } from './config.provider';
 import { ConfigService } from './config.service';
 
-describe('configProvider', () => {
-  it('should provide APP_INITIALIZER', () => {
-    expect(configProvider).toEqual({
-      provide: APP_INITIALIZER,
-      useFactory: initConfig,
-      deps: [ConfigService],
-      multi: true,
-    });
-  });
-});
-
-describe('initConfig', () => {
-  it('should return a function that calls loadConfig', async () => {
+describe('configResolver', () => {
+  it('should call loadConfig on ConfigService', async () => {
     const configServiceMock = { loadConfig: vi.fn().mockResolvedValue(undefined) };
-    const factoryFn = initConfig(configServiceMock as unknown as ConfigService);
-    await factoryFn();
+
+    TestBed.configureTestingModule({
+      providers: [{ provide: ConfigService, useValue: configServiceMock }],
+    });
+
+    await TestBed.runInInjectionContext(() => configResolver());
+
     expect(configServiceMock.loadConfig).toHaveBeenCalled();
   });
 });
