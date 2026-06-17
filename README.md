@@ -147,8 +147,6 @@ All endpoints require the `Authorization: Bearer <VAULT_API_KEY>` header.
 |`DELETE`|`/api/snippets/:id`| Delete snippet |
 |`GET`|`/api/export/json` | Export all snippets as JSON |
 
-See [spec.md](spec.md) for full schema details.
-
 ---
 
 ## 📐 Architecture Notes
