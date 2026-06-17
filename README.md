@@ -161,35 +161,6 @@ All endpoints require the `Authorization: Bearer <VAULT_API_KEY>` header.
 
 run build:web
 
-# Deploy web/dist/ to Vercel
-
-````
-
-### Backend (NestJS) → Render/Railway
-
-```bash
-npm
-
-### Backend (NestJS) → Render/Railway
-```bash
-npm run build:api
-# Set env vars: MONGO_URI, VAULT_API_KEY, PORT, NODE_ENV
-# Deploy api/dist/ + package.json
-```
-
-### Database → MongoDB Atlas
-1. Create a free cluster
-2. Add IP allowlist (or 0.0.0.0/0 for dev)
-3. Copy connection string to `MONGO_URI` env var
-- **Indent:** 2 spaces
-- **Quotes:** Single quotes
-- **Print Width:** 100 characters
-- **Component Names:** ShoWeb shows loading skeletons on network issue
-- **File Naming:** kebab-case for routes/features
-- **TypeScript:** `strict: true`, `strictTemplates: true`
-
----
-
 ## 🤝 Contributing
 
 This is a solo project. For issues or feature requests, see [spec.md](spec.md).
@@ -200,4 +171,7 @@ This is a solo project. For issues or feature requests, see [spec.md](spec.md).
 
 MIT
 rt form (`App`, `Dashboard`) — not `AppComponent`
-````
+
+```
+
+```
