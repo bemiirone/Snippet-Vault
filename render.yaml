@@ -11,6 +11,8 @@ services:
       - key: NODE_ENV
         value: production
       - key: MONGO_URI
+        value: mongodb://localhost:27017/snippet-vault
       - key: VAULT_API_KEY
+        generateValue: true
       - key: PORT
         value: 10000
