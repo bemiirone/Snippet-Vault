@@ -5,7 +5,7 @@ services:
     region: oregon
     plan: free
     buildCommand: npm install && npm run build --workspace=api
-    startCommand: cd api && node dist/main.js
+    startCommand: node api/dist/main.js
     envVars:
       - key: NODE_ENV
         value: production
