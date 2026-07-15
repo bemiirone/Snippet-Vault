@@ -4,9 +4,8 @@ services:
     env: node
     region: oregon
     plan: free
-    rootDir: api
-    buildCommand: npm install && npm run build
-    startCommand: node dist/main.js
+    buildCommand: npm install && cd api && npx nest build
+    startCommand: cd api && node dist/main.js
     envVars:
       - key: NODE_ENV
         value: production
