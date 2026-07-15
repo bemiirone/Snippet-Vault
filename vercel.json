@@ -1,0 +1,9 @@
+{
+  "framework": null,
+  "buildCommand": "cd web && npm install && npm run build",
+  "outputDirectory": "web/dist/snippet-vault/browser",
+  "installCommand": "npm install",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}

@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: snippet-vault-api
+    env: node
+    region: oregon
+    plan: free
+    rootDir: api
+    buildCommand: npm install && npm run build
+    startCommand: node dist/main.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGO_URI
+        sync: true
+      - key: VAULT_API_KEY
+        sync: true
+      - key: PORT
+        value: 10000
