@@ -11,8 +11,6 @@ services:
       - key: NODE_ENV
         value: production
       - key: MONGO_URI
-        sync: true
       - key: VAULT_API_KEY
-        sync: true
       - key: PORT
         value: 10000
