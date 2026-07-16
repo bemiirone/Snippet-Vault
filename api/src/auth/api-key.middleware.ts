@@ -1,4 +1,5 @@
 // api/src/auth/api-key.middleware.ts
+/// <reference types="node" />
 import { Injectable, NestMiddleware, UnauthorizedException } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 
@@ -22,7 +23,7 @@ export class ApiKeyMiddleware implements NestMiddleware {
     }
 
     const token = authHeader.split(' ')[1];
-    
+
     // ENFORCE: Token must match
     if (token !== apiKey) {
       throw new UnauthorizedException('Invalid API key');

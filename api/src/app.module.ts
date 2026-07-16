@@ -1,3 +1,4 @@
+/// <reference types="node" />
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -16,4 +17,4 @@ import { SnippetModule } from './snippet/snippet.module';
     SnippetModule,
   ],
 })
-export class AppModule {}
+export class AppModule { }
