@@ -8,7 +8,6 @@
     "declaration": false,
     "declarationMap": false,
     "isolatedModules": false,
-    "typeRoots": ["../node_modules/@types"],
     "types": ["node"],
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true
