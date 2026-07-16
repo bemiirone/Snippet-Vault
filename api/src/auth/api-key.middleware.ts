@@ -1,5 +1,4 @@
 // api/src/auth/api-key.middleware.ts
-/// <reference types="node" />
 import { Injectable, NestMiddleware, UnauthorizedException } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 

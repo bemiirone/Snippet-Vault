@@ -5,10 +5,13 @@
     "rootDir": "./src",
     "module": "node16",
     "moduleResolution": "node16",
+    "lib": ["ES2022"],
     "declaration": false,
     "declarationMap": false,
     "isolatedModules": false,
     "skipLibCheck": true,
+    "typeRoots": ["./node_modules/@types", "../node_modules/@types"],
+    "types": ["node"],
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true
   },
