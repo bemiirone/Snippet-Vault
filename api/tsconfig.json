@@ -8,6 +8,8 @@
     "declaration": false,
     "declarationMap": false,
     "isolatedModules": false,
+    "skipLibCheck": true,
+    "types": ["node"],
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true
   },
