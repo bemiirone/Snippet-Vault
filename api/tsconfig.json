@@ -8,7 +8,6 @@
     "declaration": false,
     "declarationMap": false,
     "isolatedModules": false,
-    "types": ["node"],
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true
   },
