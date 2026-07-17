@@ -25,7 +25,7 @@ async function bootstrap() {
     }),
   );
 
-  const browserPath = path.join(__dirname, 'browser');
+  const browserPath = path.join(process.cwd(), 'api', 'dist', 'browser');
   expressApp.use(express.static(browserPath));
 
   expressApp.get('*', (req: any, res: any) => {
