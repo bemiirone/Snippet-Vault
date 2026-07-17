@@ -2,11 +2,11 @@
   "name": "snippet-vault-web",
   "version": "0.0.0",
   "scripts": {
-    "ng": "node ../node_modules/.bin/ng",
-    "start": "ng serve",
-    "build": "node ../node_modules/.bin/ng build",
-    "watch": "node ../node_modules/.bin/ng build --watch --configuration development",
-    "test": "node ../node_modules/.bin/ng test"
+    "ng": "npm exec ng --",
+    "start": "npm exec ng -- serve",
+    "build": "npm exec ng -- build",
+    "watch": "npm exec ng -- build --watch --configuration development",
+    "test": "npm exec ng -- test"
   },
   "private": true,
   "dependencies": {

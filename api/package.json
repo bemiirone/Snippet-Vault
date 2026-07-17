@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "nest start --watch",
-    "build": "node ../node_modules/.bin/tsc -p tsconfig.json",
+    "build": "npm exec tsc -- -p tsconfig.json",
     "test": "echo \"No tests yet\""
   },
   "dependencies": {
