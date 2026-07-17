@@ -2,11 +2,11 @@
   "name": "snippet-vault-web",
   "version": "0.0.0",
   "scripts": {
-    "ng": "node ../node_modules/@angular/cli/bin/ng.js",
-    "start": "node ../node_modules/@angular/cli/bin/ng.js serve",
-    "build": "node ../node_modules/@angular/cli/bin/ng.js build",
-    "watch": "node ../node_modules/@angular/cli/bin/ng.js build --watch --configuration development",
-    "test": "node ../node_modules/@angular/cli/bin/ng.js test"
+    "ng": "sh -c 'node $(dirname $(dirname $npm_package_json))/node_modules/@angular/cli/bin/ng.js' --",
+    "start": "sh -c 'node $(dirname $(dirname $npm_package_json))/node_modules/@angular/cli/bin/ng.js serve'",
+    "build": "sh -c 'node $(dirname $(dirname $npm_package_json))/node_modules/@angular/cli/bin/ng.js build'",
+    "watch": "sh -c 'node $(dirname $(dirname $npm_package_json))/node_modules/@angular/cli/bin/ng.js build --watch --configuration development'",
+    "test": "sh -c 'node $(dirname $(dirname $npm_package_json))/node_modules/@angular/cli/bin/ng.js test'"
   },
   "private": true,
   "dependencies": {
