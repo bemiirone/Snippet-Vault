@@ -1,5 +1,5 @@
 {
-  "buildCommand": "bash scripts/build.sh",
+  "buildCommand": "npm ci && npm run build:web && npm run build:api",
   "outputDirectory": "web/dist/snippet-vault/browser",
   "rewrites": [
     { "source": "/api/(.*)", "destination": "api/src/serverless.ts" }
