@@ -3,7 +3,6 @@ import { ExpressAdapter } from '@nestjs/platform-express';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import express from 'express';
-import * as path from 'path';
 
 let cachedServer: express.Express | null = null;
 
@@ -24,13 +23,6 @@ async function bootstrap() {
       transform: true,
     }),
   );
-
-  const browserPath = path.join(__dirname, 'browser');
-  expressApp.use(express.static(browserPath));
-
-  expressApp.get('*', (req: any, res: any) => {
-    res.sendFile(path.join(browserPath, 'index.html'));
-  });
 
   await app.init();
 

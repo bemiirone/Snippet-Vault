@@ -1,17 +1,13 @@
 {
-  "version": 2,
-  "buildCommand": "npm install && npm run build:vercel",
-  "builds": [
-    {
-      "src": "api/src/serverless.ts",
-      "use": "@vercel/node"
+  "buildCommand": "npm install && npm run build:web && npm run build:api",
+  "outputDirectory": "web/dist/snippet-vault/browser",
+  "functions": {
+    "api/src/serverless.ts": {
+      "runtime": "@vercel/node@5"
     }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "api/src/serverless.ts"
-    }
+  },
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "api/src/serverless.ts" }
   ],
   "env": {
     "NODE_ENV": "production"

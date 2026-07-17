@@ -54,6 +54,5 @@ TECHNICAL_SPECIFICATION.md
 web/.angular/cache
 web/dist
 api/dist
-api/src/browser
 cli/dist
 .env
