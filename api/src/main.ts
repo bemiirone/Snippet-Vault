@@ -18,7 +18,7 @@ async function bootstrap() {
 
   if (process.env['NODE_ENV'] === 'production') {
     const expressInstance = app.getHttpAdapter().getInstance();
-    const browserPath = path.join(process.cwd(), 'api', 'dist', 'browser');
+    const browserPath = path.join(__dirname, 'browser');
 
     expressInstance.use('/', expressInstance.static(browserPath));
 

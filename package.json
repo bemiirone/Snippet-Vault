@@ -15,7 +15,7 @@
     "build:web": "npm run build --workspace=web",
     "build:api": "npm run build --workspace=api",
     "build:cli": "npm run build --workspace=cli",
-    "build:vercel": "npm run build:api && npm run build:web && cp -r web/dist/snippet-vault/browser api/dist/browser",
+    "build:vercel": "npm run build:api && npm run build:web && cp -r web/dist/snippet-vault/browser api/src/browser",
     "test:web": "npm test --workspace=web",
     "test:api": "npm test --workspace=api",
     "test:cli": "npm test --workspace=cli",
