@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npm install && npm run build:web && npm run build:api",
+  "buildCommand": "npm install && npm exec -w web -- ng build && npm exec -w api -- tsc -p tsconfig.json",
   "outputDirectory": "web/dist/snippet-vault/browser",
   "rewrites": [
     { "source": "/api/(.*)", "destination": "api/src/serverless.ts" }
