@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npm install && cd web && ../node_modules/.bin/ng build && cd .. && ./node_modules/.bin/tsc -p api/tsconfig.json",
+  "buildCommand": "npm install && cd web && node ../node_modules/@angular/cli/bin/ng.js build && cd .. && node node_modules/typescript/bin/tsc -p api/tsconfig.json",
   "outputDirectory": "web/dist/snippet-vault/browser",
   "rewrites": [
     { "source": "/api/(.*)", "destination": "api/src/serverless.ts" }
